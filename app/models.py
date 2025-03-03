@@ -15,6 +15,9 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def discoint_price(self):
+        return self.price - (self.price * self.discount / 100)
+
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"

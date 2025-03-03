@@ -1,0 +1,15 @@
+<aside class="menu has-background-success-light p-4" style="min-height: 100%; border-radius: 10px">
+    <p class="menu-label is-size-3">
+        Бренды
+    </p>
+    <ul class="menu-list">
+        {% for brand in brands %}
+            <li class="mb-2">
+                <a href="{% url 'app:home' %}?brand={{ brand.name }}&brand_pk={{ brand.pk }}">
+                    {{ brand }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+ </aside>
+ 
