@@ -1,0 +1,26 @@
+<div class="dropdown is-hoverable my-4">
+  <div class="dropdown-trigger">
+    <div
+      class="navbar-item"
+      aria-haspopup="true"
+      aria-controls="dropdown-menu"
+    >
+      <button class="button is-info is-outlined">
+        Фильтрация по категории
+      </button>
+    </div>
+  </div>
+  <div class="dropdown-menu" id="dropdown-menu" role="menu">
+    <div class="dropdown-content">
+      {% for category in categories %}
+      <a
+        href="{% url 'app:home' %}?category={{ category.name }}"
+        class="dropdown-item"
+      >
+        {{ category }}
+      </a>
+      <br />
+      {% endfor %}
+    </div>
+  </div>
+</div>
