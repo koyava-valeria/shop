@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Product, Slide
+from django.shortcuts import render, redirect
+from .models import Product, Slide, CartItem
 
 
 def home(request):
@@ -12,7 +12,6 @@ def home(request):
         products = products.filter(category__name=category)
 
     if brand:
-        print(brand)
         products = products.filter(brand=brand)
 
     return render(request, "index.html", {"products": products, "slides": slides})
@@ -21,3 +20,16 @@ def home(request):
 def product_detail(request, pk):
     product = Product.objects.get(pk=pk)
     return render(request, "product_detail.html", {"product": product})
+
+
+def add_to_cart(request, pk):
+    product = Product.objects.get(pk=pk)
+    cart_item = CartItem.objects.filter(product=product, customer=request.user).first()
+
+    if cart_item:
+        cart_item.quantity += 1
+        cart_item.save()
+    else:
+        CartItem.objects.create(product=product, customer=request.user)
+
+    return redirect("app:home")

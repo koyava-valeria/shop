@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Product(models.Model):
@@ -49,4 +50,13 @@ class Brand(models.Model):
 
 
 class Slide(models.Model):
-    image = models.ImageField(default='file.jpg')
+    image = models.ImageField(default="file.jpg")
+
+
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    
+    def __str__(self):
+        return f"{self.product.title} - {self.quantity}"
