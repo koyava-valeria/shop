@@ -1,0 +1,37 @@
+{% extends 'base_layout.html' %} {% block content %}
+<div class="hero is-halfheight">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-5">
+          <div class="box">
+            <form method="post">
+              {% if form.errors %}
+                <ul class="pt-4">
+                    {% for error in form.errors.values %}
+                    <li class="has-text-danger">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+              {% csrf_token %} {% for field in form %}
+              <div class="field">
+                <label for="{{field.id_for_label}}" class="label"
+                  >{{field.label}}</label
+                >
+                {{field}}
+              </div>
+              {% endfor %}
+              <button class="button is-warning is-fullwidth">Зарегистрироваться</button>
+              <p class="py-4 is-flex is-align-items-center is-justify-content-center">
+                <span class="has-text-info">Нет аккаунта?</span>
+                <br>
+                <a class="button is-ghost" href="{% url 'users:login' %}">Перейти к входу</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

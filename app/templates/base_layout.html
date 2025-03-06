@@ -21,7 +21,7 @@
     <header>
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a class="navbar-item" href="{% url 'app:home' %}"> 
+          <a class="navbar-item" href="{% url 'app:home' %}">
             <img
               src="https://cdn3.iconfinder.com/data/icons/fashion-2-5/34/107-512.png"
               alt=""
@@ -48,11 +48,30 @@
             <a class="navbar-item" href="{% url 'app:home' %}"> Home </a>
             <div class="navbar-item">{% categories %}</div>
           </div>
+          <div class="navbar-end">
+            {% if user.is_authenticated %}
+            <div class="navbar-item">
+              <a class="button is-link">
+                {{user.username}}
+              </a>
+            </div>
+            <div class="navbar-item">
+              <a class="button is-danger" href="{% url 'users:logout' %}">
+                Выйти
+              </a>
+            </div>
+              {% else %}
+              <div class="navbar-item">
+                <a class="button is-success is-outlined" href="{% url 'users:login' %}">
+                  Войти
+                </a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </nav>
     </header>
-    <main>
-      {% block content %} {% endblock %}
-    </main>
+    <main>{% block content %} {% endblock %}</main>
   </body>
 </html>
