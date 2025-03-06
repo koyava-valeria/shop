@@ -10,12 +10,18 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+    <script src="{% static 'script.js' %}" defer></script>
   </head>
   <body>
     <header>
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a class="navbar-item">
+          <a class="navbar-item" href="{% url 'app:home' %}"> 
             <img
               src="https://cdn3.iconfinder.com/data/icons/fashion-2-5/34/107-512.png"
               alt=""

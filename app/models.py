@@ -46,3 +46,7 @@ class Brand(models.Model):
         verbose_name = "Brand"
         verbose_name_plural = "Brands"
         db_table = "brands"
+
+
+class Slide(models.Model):
+    image = models.ImageField(default='file.jpg')

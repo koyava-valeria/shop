@@ -1,4 +1,13 @@
 {% extends 'base_layout.html' %} {% load brands %} {% block content %}
+<div class="container-slide mt-5">
+  <div id="carousel-demo" class="carousel">
+    {% for slide in slides %}
+    <div class="item-1">
+      <img src="{{slide.image.url}}" alt="" class="slider-img" />
+    </div>
+    {% endfor %}
+  </div>
+</div>
 <div class="container" style="min-height: 85%">
   <div class="columns mt-2" style="min-height: 100%">
     <div class="column is-3">{% brands %}</div>
@@ -7,45 +16,45 @@
         {% for product in products %}
         <div class="column is-4">
           <div class="card" style="min-height: 500px">
-            <div class="card-image">
-              <figure class="image">
-                <img
-                  src="https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"
-                  alt="Placeholder image"
-                />
-                <div class="has-text-right">
-                  {% if product.is_new %}
-                  <span class="tag is-danger">New!</span>
+            <a href="{% url 'app:product' product.pk %}">
+              <div class="card-image">
+                <figure class="image">
+                  <img
+                    src="https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"
+                    alt="Placeholder image"
+                  />
+                  <div class="has-text-right">
+                    {% if product.is_new %}
+                    <span class="tag is-danger">New!</span>
+                    {% endif %}
+                  </div>
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <br />
+                  <div class="media-content">
+                    <p class="title is-4">{{ product }}</p>
+                  </div>
+                </div>
+                <div class="content has-text-weight-bold">
+                  {% if product.discount %}
+                  <div class="has-text-danger is-size-4">
+                    {{ product.discoint_price }}
+                  </div>
+
+                  <div class="has-text-grey is-size-6">
+                    <del>{{ product.price }}</del>
+                  </div>
+
+                  {% else %}
+                  <div class="has-text-dark is-size-4">
+                    {{ product.discoint_price }}
+                  </div>
                   {% endif %}
                 </div>
-              </figure>
-
-            </div>
-            <div class="card-content">
-              <div class="media">
-                <br />
-                <div class="media-content">
-                  <p class="title is-4">{{ product }}</p>
-                </div>
               </div>
-              <div class="content has-text-weight-bold">
-                {% if product.discount %}
-                <div class="has-text-danger is-size-4">
-                  {{ product.discoint_price }}
-                </div>
-
-                <div class="has-text-grey is-size-6">
-                  <del>{{ product.price }}</del>
-                </div>
-
-                
-                {% else %}
-                <div class="has-text-dark is-size-4">
-                  {{ product.discoint_price }} 
-                </div>
-                {% endif %}
-              </div>
-            </div>
+            </a>
           </div>
         </div>
         {% endfor %}
