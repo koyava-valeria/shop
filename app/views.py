@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Product, Slide, CartItem
+from .models import Product, Slide, CartItem, Order, OrderProduct
 from django.contrib.auth.decorators import login_required
+from .forms import OrderForm
 
 
 def home(request):
@@ -83,3 +84,42 @@ def cart_item_delete(request, pk):
         return redirect("app:cart")
 
     return render(request, "cart_item_delete.html", {"cart_item": cart_item})
+
+
+def create_order(request):
+    cart_items = CartItem.objects.filter(customer=request.user)
+    total_price = sum([item.total_price() for item in cart_items])
+    quantity = sum([item.quantity for item in cart_items])
+
+    form = OrderForm()
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+
+        order = Order.objects.create(
+            shipping_address=request.POST.get("shipping_address"),
+            phone_number=request.POST.get("phone"),
+            customer=request.user,
+            total_price=total_price,
+        )
+
+        for item in cart_items:
+            OrderProduct.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                total_price=item.total_price(),
+            )
+
+        cart_items.delete()
+        return redirect("app:cart")
+
+    return render(
+        request,
+        "create_order.html",
+        {
+            "form": form,
+            "cart_items": cart_items,
+            "total_price": total_price,
+            "quantity": quantity,
+        },
+    )

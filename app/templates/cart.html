@@ -2,6 +2,7 @@
 
 {% block content %}
 <div class="container">
+    {% if cart_items %}
     <h1 class="title is-3">Корзина</h1>
     <div class="columns">
         <div class="column is-8">
@@ -68,7 +69,7 @@
         </div>
         <div class="column">
             <div class="box">
-                <a href="" class="button is-success is-fullwidth has-text-white">
+                <a href="{% url 'app:create_order' %}" class="button is-success is-fullwidth has-text-white">
                     Перейти к оформлению
                 </a>
                 <hr>
@@ -104,5 +105,8 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <h1 class="title is-3 has-text-centered">Корзина пуста</h1>
+    {% endif %}
 </div>
 {% endblock %}
