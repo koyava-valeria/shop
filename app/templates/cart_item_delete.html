@@ -1,0 +1,20 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="container" >
+    <div class="columns is-centered is-vcentered" style="height: 70vh">
+        <div class="column is-5">
+            <div class="box has-text-centered">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="title is-4">Вы уверены что хотите удалить товар из корзины?</div>
+                    <div class="buttons is-centered">
+                        <button class="button is-danger">Да</button>
+                        <a href="{% url 'app:cart' %}" class="button is-success">Нет</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

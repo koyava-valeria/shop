@@ -12,6 +12,7 @@ class Product(models.Model):
         "Category", on_delete=models.SET_NULL, null=True, blank=True
     )
     brand = models.ForeignKey("Brand", on_delete=models.SET_NULL, null=True, blank=True)
+    image = models.ImageField(default="default.png", blank=True)
 
     def __str__(self):
         return self.title

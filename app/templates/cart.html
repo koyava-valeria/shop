@@ -10,8 +10,7 @@
                 <div class="columns is-vcentered">
                     <div class="column is-2">
                         <figure class="image">
-                            <img src="https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"
-                                alt="">
+                            <img src="{{ item.product.image.url }}" alt="">
                         </figure>
                     </div>
                     <div class="column is-4">
@@ -20,8 +19,11 @@
                             <a href="" class="button is-small">
                                 <ion-icon name="heart"></ion-icon>
                             </a>
-                            <a href="" class="button is-small">
+                            <a href="{% url 'app:cart_item_delete' item.pk %}" class="button is-small">
                                 <ion-icon name="trash"></ion-icon>
+                            </a>
+                            <a href="{% url 'app:product' item.product.pk %}" target="_blank" class="button is-small">
+                                Посмотреть товар
                             </a>
                         </div>
                     </div>
@@ -29,29 +31,35 @@
                         <div class="has-text-weight-bold price">
                             {% if item.product.discount %}
                             <div class="has-text-danger is-size-5">
-                                {{ item.product.discoint_price }}
+                                {{ item.total_price_with_discount }}
                             </div>
 
                             <div class="has-text-grey is-size-6">
-                                <del>{{ item.product.price }}</del>
+                                <del>{{ item.total_price }}</del>
                             </div>
 
                             {% else %}
                             <div class="has-text-dark is-size-5">
-                                {{ item.product.discoint_price }}
+                                {{ item.total_price }}
                             </div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="column">
                         <div class="buttons has-addons is-right">
-                            <button class="button is-ghost">
+                            <a class="button is-ghost" href="{% url 'app:cart_item_change' item.pk 'increment' %}">
                                 <ion-icon name="add"></ion-icon>
-                            </button>
+                            </a>
                             <button class="button">{{item.quantity}}</button>
-                            <button class="button is-ghost">
+                            {% if item.quantity > 1 %}
+                            <a class="button is-ghost" href="{% url 'app:cart_item_change' item.pk 'decrement' %}">
+                                <ion-icon name="remove"></ion-icon>
+                            </a>
+                            {% else %}
+                            <button class="button is-ghost" disabled>
                                 <ion-icon name="remove"></ion-icon>
                             </button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

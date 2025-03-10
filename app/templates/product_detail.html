@@ -4,22 +4,15 @@
     <div class="column">
       <div class="box">
         <figure class="image is-4by3">
-          <img
-            src="https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"
-            alt=""
-          />
+          <img src="{{product.image.url}}" alt="" />
         </figure>
       </div>
     </div>
-    <div
-      class="column is-flex is-flex-direction-column is-justify-content-space-evenly"
-    >
+    <div class="column is-flex is-flex-direction-column is-justify-content-space-evenly">
       <div>
         <div class="title">
           {{product.name}} {% if product.discount %}
-          <span class="tag is-danger is-medium"
-            >Скидка {{ product.discount }}%</span
-          >
+          <span class="tag is-danger is-medium">Скидка {{ product.discount }}%</span>
           {% endif %}
         </div>
         <div class="subtitle is-flex mt-4">
@@ -53,7 +46,17 @@
                 {% if product.discount %}
                 <div class="has-text-danger is-size-4">{{ product.discoint_price }}</div>
                 <del class="has-text-grey-light is-size-6">{{ product.price }}</del>
-                {% else %} {{ product.discoint_price }} {% endif %}
+                {% else %}
+                {{ product.discoint_price }}
+                {% endif %}
+              </div>
+              <div class="buttons is-centered">
+                <a class="button is-small is-info" href="{% url 'app:add_to_cart' product.pk %}">
+                  <ion-icon name="cart"></ion-icon>
+                </a>
+                <a class="button is-small is-warning">
+                  <ion-icon name="heart"></ion-icon>
+                </a>
               </div>
             </div>
           </div>

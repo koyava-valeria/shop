@@ -61,3 +61,25 @@ def cart(request):
             "total_quantity": total_quantity,
         },
     )
+
+
+def cart_item_change(request, pk, action):
+    cart_item = CartItem.objects.get(pk=pk)
+
+    cart_item.quantity = (
+        cart_item.quantity + 1 if action == "increment" else cart_item.quantity - 1
+    )
+
+    cart_item.save()
+
+    return redirect("app:cart")
+
+
+def cart_item_delete(request, pk):
+    cart_item = CartItem.objects.get(pk=pk)
+
+    if request.method == "POST":
+        cart_item.delete()
+        return redirect("app:cart")
+
+    return render(request, "cart_item_delete.html", {"cart_item": cart_item})
