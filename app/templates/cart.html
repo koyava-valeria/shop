@@ -1,0 +1,100 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title is-3">Корзина</h1>
+    <div class="columns">
+        <div class="column is-8">
+            <div class="box">
+                {% for item in cart_items %}
+                <div class="columns is-vcentered">
+                    <div class="column is-2">
+                        <figure class="image">
+                            <img src="https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"
+                                alt="">
+                        </figure>
+                    </div>
+                    <div class="column is-4">
+                        <div class="title is-5">{{item.product.title}}</div>
+                        <div class="buttons">
+                            <a href="" class="button is-small">
+                                <ion-icon name="heart"></ion-icon>
+                            </a>
+                            <a href="" class="button is-small">
+                                <ion-icon name="trash"></ion-icon>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <div class="has-text-weight-bold price">
+                            {% if item.product.discount %}
+                            <div class="has-text-danger is-size-5">
+                                {{ item.product.discoint_price }}
+                            </div>
+
+                            <div class="has-text-grey is-size-6">
+                                <del>{{ item.product.price }}</del>
+                            </div>
+
+                            {% else %}
+                            <div class="has-text-dark is-size-5">
+                                {{ item.product.discoint_price }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="buttons has-addons is-right">
+                            <button class="button is-ghost">
+                                <ion-icon name="add"></ion-icon>
+                            </button>
+                            <button class="button">{{item.quantity}}</button>
+                            <button class="button is-ghost">
+                                <ion-icon name="remove"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="column">
+            <div class="box">
+                <a href="" class="button is-success is-fullwidth has-text-white">
+                    Перейти к оформлению
+                </a>
+                <hr>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="title is-4">
+                        Ваша корзина
+                    </div>
+                    <div class="content">{{ cart_items.count }} товаров</div>
+                </div>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="content">
+                        Товары({{ cart_items.count }})
+                    </div>
+                    <div class="content has-text-weight-bold">{{total_price}}</div>
+                </div>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="content">
+                        Скидка
+                    </div>
+                    <div class="content has-text-danger has-text-weight-bold">
+                        - {{discount_sum}}
+                    </div>
+                </div>
+                <hr>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="title is-4">
+                        Общая стоимость
+                    </div>
+                    <div class="content is-danger is-size-5 has-text-weight-bold">
+                        {{total_price_with_discount}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

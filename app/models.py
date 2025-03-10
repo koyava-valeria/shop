@@ -57,6 +57,12 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-    
+
     def __str__(self):
         return f"{self.product.title} - {self.quantity}"
+
+    def total_price(self):
+        return self.product.price * self.quantity
+
+    def total_price_with_discount(self):
+        return self.product.discoint_price() * self.quantity

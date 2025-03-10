@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Product, Slide, CartItem
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -22,6 +23,7 @@ def product_detail(request, pk):
     return render(request, "product_detail.html", {"product": product})
 
 
+@login_required(login_url="users:login")
 def add_to_cart(request, pk):
     product = Product.objects.get(pk=pk)
     cart_item = CartItem.objects.filter(product=product, customer=request.user).first()
@@ -33,3 +35,29 @@ def add_to_cart(request, pk):
         CartItem.objects.create(product=product, customer=request.user)
 
     return redirect("app:home")
+
+
+@login_required(login_url="users:login")
+def cart(request):
+    user = request.user
+    cart_items = CartItem.objects.filter(customer=user)
+
+    total_price = sum([item.total_price() for item in cart_items])
+    total_price_with_discount = sum(
+        [item.total_price_with_discount() for item in cart_items]
+    )
+    discount_sum = total_price - total_price_with_discount
+
+    total_quantity = sum([item.quantity for item in cart_items])
+
+    return render(
+        request,
+        "cart.html",
+        {
+            "cart_items": cart_items,
+            "total_price": total_price,
+            "total_price_with_discount": total_price_with_discount,
+            "discount_sum": discount_sum,
+            "total_quantity": total_quantity,
+        },
+    )
