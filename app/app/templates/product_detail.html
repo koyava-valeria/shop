@@ -54,9 +54,15 @@
                 <a class="button is-small is-info" href="{% url 'app:add_to_cart' product.pk %}">
                   <ion-icon name="cart"></ion-icon>
                 </a>
-                <a class="button is-small is-warning">
+                {% if user not in product.favorite.all %}
+                <a class="button is-small is-danger is-light" href="{% url 'app:add_to_favorite' product.pk %}?path={{ request.path }}">
+                  <ion-icon name="heart-outline"></ion-icon>
+                </a>
+                {% else %}
+                <a class="button is-small is-danger" href="{% url 'app:add_to_favorite' product.pk %}?path={{ request.path }}">
                   <ion-icon name="heart"></ion-icon>
                 </a>
+                {% endif %}
               </div>
             </div>
           </div>

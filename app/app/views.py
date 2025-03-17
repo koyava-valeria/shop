@@ -139,4 +139,22 @@ def add_to_favorite(request, pk):
     else:
         product.favorite.remove(request.user)
 
-    return redirect("app:home")
+    path = request.GET.get("path")
+
+    if path == "/":
+        return redirect("app:home")
+    elif "product" in path:
+        return redirect(path)
+
+
+def favorite(request):
+    user = request.user
+    favorite_products = Product.objects.filter(favorite=user)
+    action = request.GET.get("action", "")
+
+    if action == "delete":
+        pk = request.GET.get("pk")
+        favorite_products.get(pk=pk).favorite.remove(user)
+        return redirect("app:favorite")
+
+    return render(request, "favorite.html", {"products": favorite_products})
