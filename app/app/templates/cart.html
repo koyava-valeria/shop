@@ -1,0 +1,112 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="container">
+    {% if cart_items %}
+    <h1 class="title is-3">Корзина</h1>
+    <div class="columns">
+        <div class="column is-8">
+            <div class="box">
+                {% for item in cart_items %}
+                <div class="columns is-vcentered">
+                    <div class="column is-2">
+                        <figure class="image">
+                            <img src="{{ item.product.image.url }}" alt="">
+                        </figure>
+                    </div>
+                    <div class="column is-4">
+                        <div class="title is-5">{{item.product.title}}</div>
+                        <div class="buttons">
+                            <a href="" class="button is-small">
+                                <ion-icon name="heart"></ion-icon>
+                            </a>
+                            <a href="{% url 'app:cart_item_delete' item.pk %}" class="button is-small">
+                                <ion-icon name="trash"></ion-icon>
+                            </a>
+                            <a href="{% url 'app:product' item.product.pk %}" target="_blank" class="button is-small">
+                                Посмотреть товар
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <div class="has-text-weight-bold price">
+                            {% if item.product.discount %}
+                            <div class="has-text-danger is-size-5">
+                                {{ item.total_price_with_discount }}
+                            </div>
+
+                            <div class="has-text-grey is-size-6">
+                                <del>{{ item.total_price }}</del>
+                            </div>
+
+                            {% else %}
+                            <div class="has-text-dark is-size-5">
+                                {{ item.total_price }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="buttons has-addons is-right">
+                            <a class="button is-ghost" href="{% url 'app:cart_item_change' item.pk 'increment' %}">
+                                <ion-icon name="add"></ion-icon>
+                            </a>
+                            <button class="button">{{item.quantity}}</button>
+                            {% if item.quantity > 1 %}
+                            <a class="button is-ghost" href="{% url 'app:cart_item_change' item.pk 'decrement' %}">
+                                <ion-icon name="remove"></ion-icon>
+                            </a>
+                            {% else %}
+                            <button class="button is-ghost" disabled>
+                                <ion-icon name="remove"></ion-icon>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="column">
+            <div class="box">
+                <a href="{% url 'app:create_order' %}" class="button is-success is-fullwidth has-text-white">
+                    Перейти к оформлению
+                </a>
+                <hr>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="title is-4">
+                        Ваша корзина
+                    </div>
+                    <div class="content">{{ cart_items.count }} товаров</div>
+                </div>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="content">
+                        Товары({{ cart_items.count }})
+                    </div>
+                    <div class="content has-text-weight-bold">{{total_price}}</div>
+                </div>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="content">
+                        Скидка
+                    </div>
+                    <div class="content has-text-danger has-text-weight-bold">
+                        - {{discount_sum}}
+                    </div>
+                </div>
+                <hr>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="title is-4">
+                        Общая стоимость
+                    </div>
+                    <div class="content is-danger is-size-5 has-text-weight-bold">
+                        {{total_price_with_discount}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <h1 class="title is-3 has-text-centered">Корзина пуста</h1>
+    {% endif %}
+</div>
+{% endblock %}

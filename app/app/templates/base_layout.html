@@ -1,0 +1,84 @@
+{% load static %} {% load categories %}
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css" />
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+  <script src="{% static 'script.js' %}" defer></script>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'app:home' %}">
+          <img src="https://cdn3.iconfinder.com/data/icons/fashion-2-5/34/107-512.png" alt="" width="60" />
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="{% url 'app:home' %}"> Home </a>
+          <div class="navbar-item">{% categories %}</div>
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item mt-4">
+            <form method="get">
+              <div class="field has-addons">
+                <div class="control">
+                  <input type="search" class="input" placeholder="Find product" name="search">
+                </div>
+                <div class="control">
+                  <button class="button is-info">Поиск</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {% if user.is_authenticated %}
+          <div class="navbar-item">
+            <div class="dropdown is-hoverable">
+              <div class="dropdown-trigger">
+                <a class="button is-link"> {{user.username}} </a>
+              </div>
+              <div class="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                  <a href="{% url 'app:cart' %}" class="dropdown-item"> Корзина </a>
+                </div>
+              </div>
+            </div>
+            <div class="navbar-item">
+              <a class="button is-danger" href="{% url 'users:logout' %}">
+                Выйти
+              </a>
+            </div>
+            {% else %}
+            <div class="navbar-item">
+              <a class="button is-success is-outlined" href="{% url 'users:login' %}">
+                Войти
+              </a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>{% block content %} {% endblock %}</main>
+</body>
+
+</html>

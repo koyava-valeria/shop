@@ -1,0 +1,89 @@
+{% extends 'base_layout.html' %} {% load brands %} {% block content %}
+<div class="container-slide mt-5">
+  <div id="carousel-demo" class="carousel">
+    {% for slide in slides %}
+    <div class="item-1">
+      <img src="{{slide.image.url}}" alt="" class="slider-img" />
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="container" style="min-height: 85%">
+  <div class="columns mt-2" style="min-height: 100%">
+    <div class="column is-2">{% brands %}</div>
+    <div class="column">
+      <div class="columns is-multiline is-centered">
+        {% for product in products %}
+        <div class="column is-3">
+          <div class="card" style="min-height: 400px">
+            <a href="{% url 'app:product' product.pk %}">
+              <div class="card-image">
+                <figure class="image">
+                  <img src="{{ product.image.url }}" alt="Placeholder image" />
+                  <div class="has-text-right">
+                    {% if product.is_new %}
+                    <span class="tag is-danger">New!</span>
+                    {% endif %}
+                  </div>
+                </figure>
+              </div>
+            </a>
+            <div class="card-content">
+              <div class="py-2">
+                <br />
+                <div class="media-content">
+                  <p class="title is-6">{{ product }}</p>
+                </div>
+              </div>
+              <div class="is-flex is-justify-content-space-between">
+                <div class="is-flex is-align-items-center">
+                  <ion-icon name="star" class="has-text-warning mr-1"></ion-icon>
+                  5.0
+                </div>
+                <div class="is-flex is-align-items-center">
+                  <ion-icon name="chatbubble" class="mr-1"></ion-icon>
+                  0 отзывов
+                </div>
+              </div>
+              <div class="has-text-weight-bold price">
+                {% if product.discount %}
+                <div class="has-text-danger is-size-5">
+                  {{ product.discoint_price }}
+                </div>
+
+                <div class="has-text-grey is-size-6">
+                  <del>{{ product.price }}</del>
+                </div>
+
+                {% else %}
+                <div class="has-text-dark is-size-5">
+                  {{ product.discoint_price }}
+                </div>
+                {% endif %}
+              </div>
+              <div class="buttons is-centered">
+                <a class="button is-small is-primary is-light" href="{% url 'app:product' product.pk %}">
+                  Посмотреть
+                </a>
+                <a class="button is-small is-info is-light" href="{% url 'app:add_to_cart' product.pk %}">
+                  <ion-icon name="cart"></ion-icon>
+                </a>
+                {% if user not in product.favorite.all %}
+                <a class="button is-small is-danger is-light" href="{% url 'app:add_to_favorite' product.pk %}">
+                  <ion-icon name="heart-outline"></ion-icon>
+                </a>
+                {% else %}
+                <a class="button is-small is-danger" href="{% url 'app:add_to_favorite' product.pk %}">
+                  <ion-icon name="heart"></ion-icon>
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
