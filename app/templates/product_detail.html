@@ -11,7 +11,7 @@
     <div class="column is-flex is-flex-direction-column is-justify-content-space-evenly">
       <div>
         <div class="title">
-          {{product.title}} 
+          {{product.title}}
           {% if product.discount %}
           <span class="tag is-danger is-medium">Скидка {{ product.discount }}%</span>
           {% endif %}
@@ -94,6 +94,54 @@
         <button class="button is-warning" type="reset">Очистить</button>
       </div>
     </form>
+    <div class="content">
+      <div class="title is-3 has-text-centered">{{ reviews.count }} отзывов</div>
+      <div class="columns is-multiline is-centered mt-6">
+        {% for review in reviews %}
+        <div class="column is-4">
+          <div class="card">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-48x48">
+                    <img src="https://www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png" alt="">
+                  </figure>
+                </div>
+                <div class="media-content is-flex is-justify-content-space-between">
+                  <div>
+                    <div class="title is-5">{{review.user.first_name}} {{review.user.last_name}}</div>
+                    <div class="subtitle">@{{review.user.username}}</div>
+                  </div>
+                  {% if user == review.user %}
+                  <div class="buttons">
+                    <a href="" class="button is-small is-info">
+                      <ion-icon name="create"></ion-icon>
+                    </a>
+                    <a href="{% url 'app:delete_review' review.pk %}" class="button is-small is-danger">
+                      <ion-icon name="trash"></ion-icon>
+                    </a>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="content">
+                <div>
+                  <span class="text">
+                    {{review.rating}}/5
+                  </span>
+                  <ion-icon name="star" class="has-text-warning"></ion-icon>
+                  <span class="mx-2 has-text-grey-light">{{review.date_created|date:"d.m.Y"}}</span>
+                </div>
+              </div>
+              <div class="subtitle has-text-grey">
+                {{review.text}}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </section>
 {% endblock %}

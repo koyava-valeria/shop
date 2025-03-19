@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import HttpResponse
 
-from .models import Product, Slide, CartItem, Order, OrderProduct
-from .forms import OrderForm, RatingForm
+from .models import *
+from .forms import *
 
 
 def home(request):
@@ -171,3 +172,14 @@ def favorite(request):
         return redirect("app:favorite")
 
     return render(request, "favorite.html", {"products": favorite_products})
+
+
+def delete_review(request, pk):
+    review = Review.objects.get(pk=pk)
+    product = review.product
+
+    if request.method == "POST":
+        review.delete()
+        return redirect("app:product", pk=product.pk)
+
+    return render(request, "delete_review.html", {"review": review, "product": product})
