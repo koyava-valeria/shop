@@ -1,27 +1,46 @@
 from django.shortcuts import render, redirect
-from .models import Product, Slide, CartItem, Order, OrderProduct
 from django.contrib.auth.decorators import login_required
-from .forms import OrderForm
+from django.db.models import Q
+
+from .models import Product, Slide, CartItem, Order, OrderProduct
+from .forms import OrderForm, RatingForm
 
 
 def home(request):
     category = request.GET.get("category")
     brand = request.GET.get("brand_pk")
+    search = request.GET.get("search")
     products = Product.objects.all()
     slides = Slide.objects.all()
 
-    if category:
-        products = products.filter(category__name=category)
-
-    if brand:
-        products = products.filter(brand=brand)
+    products = products.filter(category__name=category) if category else products
+    products = products.filter(brand=brand) if brand else products
+    products = (
+        products.filter(Q(title__icontains=search) | Q(description__icontains=search))
+        if search
+        else products
+    )
 
     return render(request, "index.html", {"products": products, "slides": slides})
 
 
 def product_detail(request, pk):
     product = Product.objects.get(pk=pk)
-    return render(request, "product_detail.html", {"product": product})
+    form = RatingForm(request.POST or None)
+    reviews = product.review_set.all().order_by("-date_created")
+
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.user = request.user
+        instance.product = product
+        instance.save()
+        return redirect("app:product", pk=product.pk)
+
+    return render(
+        request,
+        "product_detail.html",
+        {"product": product, "form": form, "reviews": reviews},
+    )
 
 
 @login_required(login_url="users:login")
@@ -123,3 +142,32 @@ def create_order(request):
             "quantity": quantity,
         },
     )
+
+
+def add_to_favorite(request, pk):
+    product = Product.objects.get(pk=pk)
+
+    if request.user not in product.favorite.all():
+        product.favorite.add(request.user)
+    else:
+        product.favorite.remove(request.user)
+
+    path = request.GET.get("path")
+
+    if path == "/":
+        return redirect("app:home")
+    elif "product" in path:
+        return redirect(path)
+
+
+def favorite(request):
+    user = request.user
+    favorite_products = Product.objects.filter(favorite=user)
+    action = request.GET.get("action", "")
+
+    if action == "delete":
+        pk = request.GET.get("pk")
+        favorite_products.get(pk=pk).favorite.remove(user)
+        return redirect("app:favorite")
+
+    return render(request, "favorite.html", {"products": favorite_products})

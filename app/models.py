@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+RATING_CHOICES = [
+    (1, "1 - Очень плохо"),
+    (2, "2 - Плохо"),
+    (3, "3 - Нормально"),
+    (4, "4 - Хорошо"),
+    (5, "5 - Идеально"),
+]
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -13,6 +21,7 @@ class Product(models.Model):
     )
     brand = models.ForeignKey("Brand", on_delete=models.SET_NULL, null=True, blank=True)
     image = models.ImageField(default="default.png", blank=True)
+    favorite = models.ManyToManyField(User, related_name="favorite_products")
 
     def __str__(self):
         return self.title
@@ -89,3 +98,15 @@ class OrderProduct(models.Model):
 
     def __str__(self):
         return f"{self.product.title} - {self.quantity}"
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+    photo = models.ImageField(default="default.png", blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.title}"

@@ -11,7 +11,8 @@
     <div class="column is-flex is-flex-direction-column is-justify-content-space-evenly">
       <div>
         <div class="title">
-          {{product.name}} {% if product.discount %}
+          {{product.title}} 
+          {% if product.discount %}
           <span class="tag is-danger is-medium">Скидка {{ product.discount }}%</span>
           {% endif %}
         </div>
@@ -54,9 +55,17 @@
                 <a class="button is-small is-info" href="{% url 'app:add_to_cart' product.pk %}">
                   <ion-icon name="cart"></ion-icon>
                 </a>
-                <a class="button is-small is-warning">
+                {% if user not in product.favorite.all %}
+                <a class="button is-small is-danger is-light"
+                  href="{% url 'app:add_to_favorite' product.pk %}?path={{ request.path }}">
+                  <ion-icon name="heart-outline"></ion-icon>
+                </a>
+                {% else %}
+                <a class="button is-small is-danger"
+                  href="{% url 'app:add_to_favorite' product.pk %}?path={{ request.path }}">
                   <ion-icon name="heart"></ion-icon>
                 </a>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -65,7 +74,26 @@
     </div>
   </div>
   <div class="box">
-    <input class="input" type="text" placeholder="Оставьте ваш отзыв" />
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      {% if field.name == 'rating' %}
+      <div class="select is-fullwidth mb-4">
+        <label for="{{field.id_for_label}}" class="label">{{field.label}}</label>
+        {{field}}
+      </div>
+      {% else %}
+      <div class="field">
+        <label for="{{field.id_for_label}}" class="label">{{field.label}}</label>
+        {{field}}
+      </div>
+      {% endif %}
+      {% endfor %}
+      <div class="mt-6">
+        <button class="button is-success">Отправить</button>
+        <button class="button is-warning" type="reset">Очистить</button>
+      </div>
+    </form>
   </div>
 </section>
 {% endblock %}

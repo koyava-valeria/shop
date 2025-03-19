@@ -1,0 +1,83 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+{% if products %}
+<div class="container" style="min-height: 85%">
+    <div class="columns mt-2" style="min-height: 100%">
+        <div class="column">
+            <div class="columns is-multiline is-centered">
+                {% for product in products %}
+                <div class="column is-3">
+                    <div class="card" style="min-height: 400px">
+                        <a href="{% url 'app:product' product.pk %}">
+                            <div class="card-image">
+                                <figure class="image">
+                                    <img src="{{ product.image.url }}" alt="Placeholder image" />
+                                    <div class="has-text-right">
+                                        {% if product.is_new %}
+                                        <span class="tag is-danger">New!</span>
+                                        {% endif %}
+                                    </div>
+                                </figure>
+                            </div>
+                        </a>
+                        <div class="card-content">
+                            <div class="py-2">
+                                <br />
+                                <div class="media-content">
+                                    <p class="title is-6">{{ product }}</p>
+                                </div>
+                            </div>
+                            <div class="is-flex is-justify-content-space-between">
+                                <div class="is-flex is-align-items-center">
+                                    <ion-icon name="star" class="has-text-warning mr-1"></ion-icon>
+                                    5.0
+                                </div>
+                                <div class="is-flex is-align-items-center">
+                                    <ion-icon name="chatbubble" class="mr-1"></ion-icon>
+                                    0 отзывов
+                                </div>
+                            </div>
+                            <div class="has-text-weight-bold price">
+                                {% if product.discount %}
+                                <div class="has-text-danger is-size-5">
+                                    {{ product.discoint_price }}
+                                </div>
+
+                                <div class="has-text-grey is-size-6">
+                                    <del>{{ product.price }}</del>
+                                </div>
+
+                                {% else %}
+                                <div class="has-text-dark is-size-5">
+                                    {{ product.discoint_price }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="buttons is-centered">
+                                <a class="button is-small is-primary is-light"
+                                    href="{% url 'app:product' product.pk %}">
+                                    Посмотреть
+                                </a>
+                                <a class="button is-small is-info is-light"
+                                    href="{% url 'app:add_to_cart' product.pk %}">
+                                    <ion-icon name="cart"></ion-icon>
+                                </a>
+
+                                <a class="button is-small is-danger is-light"
+                                    href="{% url 'app:favorite' %}?action=delete&pk={{ product.pk }}">
+                                    <ion-icon name="trash"></ion-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="title has-text-centered">В избранном пусто</div>
+{% endif %}
+{% endblock %}
