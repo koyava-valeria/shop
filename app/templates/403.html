@@ -1,0 +1,21 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="columns is-centered is-vcentered" style="height: 70vh">
+        <div class="column">
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/error-403-illustration-download-in-svg-png-gif-file-formats--forbidden-client-website-http-web-empty-pages-pack-user-interface-illustrations-6588413.png?f=webp"
+                alt="">
+        </div>
+        <div class="column">
+            <div class="has-text-centered">
+                <div class="title is-2">У вас нет доступа
+                    <br> к этой странице</div>
+                <div class="buttons is-centered">
+                    <a href="{% url 'app:home' %}" class="button is-success">На главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

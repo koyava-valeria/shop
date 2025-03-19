@@ -84,6 +84,7 @@ def cart(request):
     )
 
 
+@login_required(login_url="users:login")
 def cart_item_change(request, pk, action):
     cart_item = CartItem.objects.get(pk=pk)
 
@@ -96,6 +97,7 @@ def cart_item_change(request, pk, action):
     return redirect("app:cart")
 
 
+@login_required(login_url="users:login")
 def cart_item_delete(request, pk):
     cart_item = CartItem.objects.get(pk=pk)
 
@@ -106,6 +108,7 @@ def cart_item_delete(request, pk):
     return render(request, "cart_item_delete.html", {"cart_item": cart_item})
 
 
+@login_required(login_url="users:login")
 def create_order(request):
     cart_items = CartItem.objects.filter(customer=request.user)
     total_price = sum([item.total_price() for item in cart_items])
@@ -145,6 +148,7 @@ def create_order(request):
     )
 
 
+@login_required(login_url="users:login")
 def add_to_favorite(request, pk):
     product = Product.objects.get(pk=pk)
 
@@ -161,6 +165,7 @@ def add_to_favorite(request, pk):
         return redirect(path)
 
 
+@login_required(login_url="users:login")
 def favorite(request):
     user = request.user
     favorite_products = Product.objects.filter(favorite=user)
@@ -174,12 +179,32 @@ def favorite(request):
     return render(request, "favorite.html", {"products": favorite_products})
 
 
+@login_required(login_url="users:login")
 def delete_review(request, pk):
     review = Review.objects.get(pk=pk)
     product = review.product
+
+    if request.user != review.user:
+        return render(request, "403.html")
 
     if request.method == "POST":
         review.delete()
         return redirect("app:product", pk=product.pk)
 
     return render(request, "delete_review.html", {"review": review, "product": product})
+
+
+@login_required(login_url="users:login")
+def edit_review(request, pk):
+    review = Review.objects.get(pk=pk)
+    form = RatingForm(request.POST or None, instance=review)
+
+    if request.user != review.user:
+        return render(request, "403.html")
+
+
+    if form.is_valid():
+        form.save()
+        return redirect("app:product", pk=review.product.pk)
+
+    return render(request, "edit_review.html", {"form": form, "review": review})

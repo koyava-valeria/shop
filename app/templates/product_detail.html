@@ -109,12 +109,17 @@
                 </div>
                 <div class="media-content is-flex is-justify-content-space-between">
                   <div>
-                    <div class="title is-5">{{review.user.first_name}} {{review.user.last_name}}</div>
-                    <div class="subtitle">@{{review.user.username}}</div>
+                    <div class="title is-5">
+                      {% if review.user.first_name and review.user.last_name %}
+                      {{review.user.first_name}} {{review.user.last_name}}
+                      {% else %}
+                      Аноним
+                      {% endif %}
+                    </div>
                   </div>
                   {% if user == review.user %}
                   <div class="buttons">
-                    <a href="" class="button is-small is-info">
+                    <a href="{% url 'app:edit_review' review.pk %}" class="button is-small is-info">
                       <ion-icon name="create"></ion-icon>
                     </a>
                     <a href="{% url 'app:delete_review' review.pk %}" class="button is-small is-danger">
