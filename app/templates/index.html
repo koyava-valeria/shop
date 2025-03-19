@@ -38,11 +38,11 @@
               <div class="is-flex is-justify-content-space-between">
                 <div class="is-flex is-align-items-center">
                   <ion-icon name="star" class="has-text-warning mr-1"></ion-icon>
-                  5.0
+                  {{product.get_average_rating}}
                 </div>
                 <div class="is-flex is-align-items-center">
                   <ion-icon name="chatbubble" class="mr-1"></ion-icon>
-                  0 отзывов
+                  {{product.review_set.count}} отзывов
                 </div>
               </div>
               <div class="has-text-weight-bold price">

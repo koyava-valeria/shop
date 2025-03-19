@@ -30,6 +30,9 @@ def product_detail(request, pk):
     form = RatingForm(request.POST or None)
     reviews = product.review_set.all().order_by("-date_created")
 
+    ordered_by = request.GET.get("ordered_by") or "-date_created"
+    reviews = reviews.order_by(ordered_by)
+
     if form.is_valid():
         instance = form.save(commit=False)
         instance.user = request.user
@@ -40,7 +43,12 @@ def product_detail(request, pk):
     return render(
         request,
         "product_detail.html",
-        {"product": product, "form": form, "reviews": reviews},
+        {
+            "product": product,
+            "form": form,
+            "reviews": reviews,
+            "ordered_by": ordered_by,
+        },
     )
 
 
@@ -201,7 +209,6 @@ def edit_review(request, pk):
 
     if request.user != review.user:
         return render(request, "403.html")
-
 
     if form.is_valid():
         form.save()

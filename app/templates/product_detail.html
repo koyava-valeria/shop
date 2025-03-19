@@ -89,9 +89,25 @@
       </div>
       {% endif %}
       {% endfor %}
-      <div class="mt-6">
-        <button class="button is-success">Отправить</button>
-        <button class="button is-warning" type="reset">Очистить</button>
+      <div class="mt-6 is-flex is-justify-content-space-between ">
+        <div class="">
+          <button class="button is-success">Отправить</button>
+          <button class="button is-warning" type="reset">Очистить</button>
+        </div>
+        <div class="">
+          <a class="button  is-small {% if ordered_by == '-date_created' %}is-primary{% endif %}"
+            href="{% url 'app:product' product.pk %}?ordered_by=-date_created">
+            Новые
+          </a>
+          <a class="button  is-small {% if ordered_by == 'rating' %}is-primary{% endif %}" type="reset"
+            href="{% url 'app:product' product.pk %}?ordered_by=rating">
+            С низкой оценкой
+          </a>
+          <a class="button  is-small {% if ordered_by == '-rating' %}is-primary{% endif %}" type="reset"
+            href="{% url 'app:product' product.pk %}?ordered_by=-rating">
+            С высокой оценкой
+          </a>
+        </div>
       </div>
     </form>
     <div class="content">

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 RATING_CHOICES = [
     (1, "1 - Очень плохо"),
@@ -28,6 +29,10 @@ class Product(models.Model):
 
     def discoint_price(self):
         return self.price - (self.price * self.discount / 100)
+
+    def get_average_rating(self):
+        avg_rating = self.review_set.aggregate(Avg("rating"))["rating__avg"]
+        return round(avg_rating, 1) if avg_rating else 5.0
 
     class Meta:
         verbose_name = "Product"
