@@ -27,16 +27,18 @@ def home(request):
 
 def product_detail(request, pk):
     product = Product.objects.get(pk=pk)
-    form = RatingForm(request.POST or None)
+    form = RatingForm(request.POST or None, request.FILES or None)
     reviews = product.review_set.all().order_by("-date_created")
 
     ordered_by = request.GET.get("ordered_by") or "-date_created"
     reviews = reviews.order_by(ordered_by)
 
     if form.is_valid():
+        print(request.FILES)
         instance = form.save(commit=False)
         instance.user = request.user
         instance.product = product
+        instance.photo = request.FILES.get("photo")
         instance.save()
         return redirect("app:product", pk=product.pk)
 
@@ -215,3 +217,9 @@ def edit_review(request, pk):
         return redirect("app:product", pk=review.product.pk)
 
     return render(request, "edit_review.html", {"form": form, "review": review})
+
+
+def show_review(request, pk):
+    review = Review.objects.get(pk=pk)
+
+    return render(request, "show_review.html", {"review": review})

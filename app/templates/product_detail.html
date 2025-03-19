@@ -74,13 +74,15 @@
     </div>
   </div>
   <div class="box">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {% for field in form %}
       {% if field.name == 'rating' %}
-      <div class="select is-fullwidth mb-4">
-        <label for="{{field.id_for_label}}" class="label">{{field.label}}</label>
-        {{field}}
+      <div class="field">
+        <div class="select is-fullwidth mb-4">
+          <label for="{{field.id_for_label}}" class="label">{{field.label}}</label>
+          {{field}}
+        </div>
       </div>
       {% else %}
       <div class="field">
@@ -154,6 +156,13 @@
                   <span class="mx-2 has-text-grey-light">{{review.date_created|date:"d.m.Y"}}</span>
                 </div>
               </div>
+              <figure class="image is-48x48 ">
+                {% if review.photo %}
+                <a href="{% url 'app:show_review' review.pk %}">
+                  <img src="{{review.photo.url}}" alt="">
+                </a>
+                {% endif %}
+              </figure>
               <div class="subtitle has-text-grey">
                 {{review.text}}
               </div>

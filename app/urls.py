@@ -15,6 +15,7 @@ urlpatterns = [
     path("cart_item_delete/<int:pk>", cart_item_delete, name="cart_item_delete"),
     path("favorite/", favorite, name="favorite"),
     path("add_to_favorite/<int:pk>", add_to_favorite, name="add_to_favorite"),
+    path("show_review/<int:pk>", show_review, name="show_review"),
     path("delete_review/<int:pk>", delete_review, name="delete_review"),
     path("edit_review/<int:pk>", edit_review, name="edit_review"),
 ]

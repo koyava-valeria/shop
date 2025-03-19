@@ -1,0 +1,21 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="columns is-centered is-vcentered" style="height: 70vh">
+        <div class="column is-8">
+            <div class="box">
+                <figure class="image">
+                    <img src="{{review.photo.url}}" alt="">
+                </figure>
+                <div class="subtitle has-text-grey mt-4">
+                    {{review.text}}
+                </div>
+                <div class="buttons">
+                    <a href="{% url 'app:product' review.product.pk %}" class="button is-success">Назад</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

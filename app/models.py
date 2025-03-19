@@ -111,7 +111,7 @@ class Review(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
-    photo = models.ImageField(default="default.png", blank=True)
+    photo = models.ImageField(blank=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.product.title}"

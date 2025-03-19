@@ -34,7 +34,8 @@ class RatingForm(forms.ModelForm):
         choices=RATING_CHOICES,
         required=True,
     )
+    photo = forms.ImageField(required=False)
 
     class Meta:
         model = Review
-        fields = ["text", "rating"]
+        fields = ["text", "rating", "photo"]
